@@ -26,7 +26,11 @@ class Calculator extends Component {
 		{
 			this.setState({
 				exp:this.state.exp+evt.target.value
+			},function() {
+				var element = document.getElementsByClassName('input')[0];
+				element.scrollLeft = element.scrollWidth;
 			});
+			
 		}
 		else
 		{	
@@ -54,8 +58,8 @@ class Calculator extends Component {
 	render() {
 		return (
 			<div className="Calculator">
-				<div  className="input">
-					<h1 style={{overflow: 'hidden', textOverflow: 'ellipsis'}}>{this.state.exp}</h1>
+				<div style={{overflowX: 'auto',textAlign:'right'}} className="input">
+					<h1 >{this.state.exp}</h1>
 				</div>
 				<div className="grid">
 					<div className="row">
@@ -87,6 +91,7 @@ class Calculator extends Component {
 						<button onClick={this.append.bind(this)} value="+" >+</button>
 					</div>
 				</div>
+
 			</div>
 		);
 	}
