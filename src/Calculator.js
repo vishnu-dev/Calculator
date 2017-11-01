@@ -4,14 +4,16 @@ class Calculator extends Component {
 	constructor() {
 		super();
 		this.state = {
-			exp:0
+			exp:0,
+			flag:false
 		}
 	}
 	calculate(evt){
 		try{
-			this.setState({
-				exp:eval(this.state.exp)
-			});
+			if(!this.state.flag)
+				this.setState({
+					exp:eval(this.state.exp)
+				});
 		}
 		catch(e)
 		{
@@ -24,13 +26,22 @@ class Calculator extends Component {
 	append(evt){
 		if(this.state.exp!=0)
 		{
-			this.setState({
-				exp:this.state.exp+evt.target.value
-			},function() {
-				var element = document.getElementsByClassName('input')[0];
-				element.scrollLeft = element.scrollWidth;
-			});
-			
+			if((evt.target.value=='+'||evt.target.value=='-'||evt.target.value=='*'||evt.target.value=='/'||evt.target.value=='.')&&(!this.state.flag))
+				this.setState({
+					exp:this.state.exp+evt.target.value,
+					flag:true
+				},function() {
+					var element = document.getElementsByClassName('screen')[0];
+					element.scrollLeft = element.scrollWidth;
+				});
+			if(evt.target.value>=0&&evt.target.value<=9)
+				this.setState({
+					exp:this.state.exp+evt.target.value,
+					flag:false
+				},function() {
+					var element = document.getElementsByClassName('screen')[0];
+					element.scrollLeft = element.scrollWidth;
+				});
 		}
 		else
 		{	
@@ -58,13 +69,18 @@ class Calculator extends Component {
 	render() {
 		return (
 			<div className="Calculator">
-				<div style={{overflowX: 'auto',textAlign:'right'}} className="input">
-					<h1 >{this.state.exp}</h1>
+				<div className="input">
+					<div className="head">
+						<p>theCalculator</p>
+					</div>
+					<div id="style-1" style={{overflowX: 'auto',textAlign:'right'}} className="screen">
+						<p>{this.state.exp}</p>
+					</div>
 				</div>
 				<div className="grid">
 					<div className="row">
-						<button className="toprow" onClick={this.del.bind(this)}>DEL</button>
-						<button className="toprow" onClick={this.clearAll.bind(this)}>CE</button>
+						<button className="toprow pulse" onClick={this.del.bind(this)}>DEL</button>
+						<button className="toprow pulse" onClick={this.clearAll.bind(this)}>CE</button>
 					</div>
 					<div className="row">
 						<button onClick={this.append.bind(this)} value="7" >7</button>
